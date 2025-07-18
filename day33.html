@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Day 33 Tasks - Saredufy Web Plus Academy</title>
+  <style>
+    #box, #dblBox {
+      width: 100px;
+      height: 100px;
+      background-color: red;
+      margin: 10px;
+    }
+    #dblBox {
+      background-color: orange;
+      transition: transform 0.3s;
+    }
+    .card {
+      border: 1px solid #ccc;
+      margin: 5px;
+      padding: 5px;
+    }
+    img {
+      display: block;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+
+
+  <ul id="todoList"></ul>
+  <div id="container"></div>
+  <div class="card"></div>
+  <div class="card"></div>
+  <select id="dropdown"></select>
+  <table id="myTable" border="1"><tbody></tbody></table>
+
+  <input type="text" id="inputField" placeholder="Type something..." />
+  <div id="box"></div>
+
+  <form id="myForm"><button type="submit">Submit</button></form><br>
+
+  <div id="parent">
+    <button>Child Button</button>
+  </div><br>
+
+  <select id="selectColor">
+    <option>Red</option>
+    <option>Blue</option>
+  </select>
+  <p id="colorResult"></p>
+
+  <input type="text" id="search" placeholder="Search..." />
+  <p id="liveOutput"></p>
+
+  <img id="hoverImg" src="https://tse4.mm.bing.net/th/id/OIP.Kgb00CppWEx3SyjucN8_JQHaEo?rs=1&pid=ImgDetMain&o=7&rm=3" />
+  <div id="dblBox"></div>
+
+  <script>
+    // Part 1: Creating Elements
+    const newP = document.createElement('p');
+    console.log("New <p> element:", newP);
+
+    const div = document.createElement('div');
+    div.textContent = "Hello DOM";
+    document.body.appendChild(div);
+
+    const li = document.createElement('li');
+    li.textContent = "New Task";
+    document.getElementById("todoList").appendChild(li);
+
+    const img = document.createElement('img');
+    img.setAttribute('src', 'https://via.placeholder.com/100');
+    document.getElementById('container').appendChild(img);
+
+    const btn = document.createElement('button');
+    btn.textContent = "Click Me";
+    const divBtn = document.createElement('div');
+    divBtn.appendChild(btn);
+    document.body.appendChild(divBtn);
+
+    const ul = document.getElementById('todoList');
+    for (let i = 1; i <= 3; i++) {
+      const newLi = document.createElement('li');
+      newLi.textContent = "Task " + i;
+      ul.appendChild(newLi);
+    }
+
+    const h3 = document.createElement('h3');
+    h3.textContent = "This is a heading";
+    const section = document.createElement('section');
+    section.append(h3);
+    document.body.appendChild(section);
+
+    document.querySelectorAll('.card').forEach(card => {
+      const p = document.createElement('p');
+      p.textContent = "Appended to card";
+      card.appendChild(p);
+    });
+
+    const opt = document.createElement('option');
+    opt.value = "1";
+    opt.textContent = "Option 1";
+    document.getElementById("dropdown").appendChild(opt);
+
+    const row = document.createElement('tr');
+    for (let i = 0; i < 3; i++) {
+      const td = document.createElement('td');
+      td.textContent = `Cell ${i + 1}`;
+      row.appendChild(td);
+    }
+    document.querySelector('#myTable tbody').appendChild(row);
+
+    const toRemove = document.querySelector("section");
+    toRemove.remove();
+
+    const parent = document.getElementById("container");
+    const child = parent.querySelector("img");
+    if (child) parent.removeChild(child);
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.textContent = "Delete Card";
+    deleteBtn.onclick = () => {
+      document.querySelector(".card")?.remove();
+    };
+    document.body.appendChild(deleteBtn);
+
+    const items = document.querySelectorAll("#todoList li");
+    items.forEach(item => {
+      if (item.textContent.includes("done")) {
+        item.remove();
+      }
+    });
+
+    const resetBtn = document.createElement("button");
+    resetBtn.textContent = "Reset";
+    resetBtn.onclick = () => {
+      document.getElementById("container").innerHTML = "";
+    };
+    document.body.appendChild(resetBtn);
+
+    // Part 2: Event Handling
+    document.querySelector("button").addEventListener("click", () => {
+      console.log("Button clicked");
+    });
+
+    document.getElementById("box").addEventListener("mouseover", () => {
+      document.getElementById("box").style.backgroundColor = "green";
+    });
+
+    document.getElementById("inputField").addEventListener("input", (e) => {
+      console.log(e.target.value);
+    });
+
+    function sayHi() {
+      alert("Hi!");
+    }
+    const btnSayHi = document.createElement('button');
+    btnSayHi.textContent = "Say Hi";
+    btnSayHi.addEventListener("click", sayHi);
+    document.body.appendChild(btnSayHi);
+
+    const tempBtn = document.createElement("button");
+    tempBtn.textContent = "Click once";
+    const oneClick = () => {
+      alert("Clicked once only");
+      tempBtn.removeEventListener("click", oneClick);
+    };
+    tempBtn.addEventListener("click", oneClick);
+    document.body.appendChild(tempBtn);
+
+    ["One", "Two", "Three"].forEach(label => {
+      const b = document.createElement("button");
+      b.textContent = label;
+      b.addEventListener("click", e => console.log(e.target.textContent));
+      document.body.appendChild(b);
+    });
+
+    document.body.addEventListener("click", e => {
+      console.log("Target:", e.target.tagName);
+    });
+
+    document.getElementById("parent").addEventListener("click", e => {
+      console.log("CurrentTarget:", e.currentTarget);
+      console.log("Target:", e.target);
+    });
+
+    document.getElementById("myForm").addEventListener("submit", e => {
+      e.preventDefault();
+      alert("Form submission prevented!");
+    });
+
+    document.querySelector("#parent button").addEventListener("click", e => {
+      e.stopPropagation();
+      console.log("Child clicked (bubbling stopped)");
+    });
+
+    // Part 3: Common Events
+    document.getElementById("selectColor").onchange = (e) => {
+      document.getElementById("colorResult").textContent = "Selected: " + e.target.value;
+    };
+    
+    const bgBtn = document.createElement("button");
+    bgBtn.textContent = "Change Background";
+    bgBtn.onclick = () => {
+      document.body.style.backgroundColor = "lightblue";
+    };
+    document.body.appendChild(bgBtn);
+
+    document.getElementById("search").oninput = (e) => {
+      document.getElementById("liveOutput").textContent = e.target.value;
+    };
+
+    const hoverImg = document.getElementById("hoverImg");
+    hoverImg.onmouseover = () => hoverImg.style.opacity = "0.5";
+    hoverImg.onmouseout = () => hoverImg.style.opacity = "1";
+
+    const dblBox = document.getElementById("dblBox");
+    dblBox.ondblclick = () => {
+      dblBox.style.transform = dblBox.style.transform === "scale(1.5)" ? "scale(1)" : "scale(1.5)";
+    };
+  </script>
+
+</body>
+</html>
